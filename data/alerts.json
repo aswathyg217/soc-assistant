@@ -1,0 +1,4 @@
+[
+  {"id": "ALR-1001", "tenant": "acme", "rule": "Brute-force SSH then success", "severity": "high", "status": "open", "related_log_ids": ["acme-log-01", "acme-log-02", "acme-log-03"], "analyst_task": "Decide whether this alert is a true positive or benign.", "ground_truth": "true_positive"},
+  {"id": "ALR-1002", "tenant": "acme", "rule": "Outbound connection flagged by feed", "severity": "medium", "status": "open", "related_log_ids": ["acme-log-10"], "analyst_task": "Decide whether this alert is a true positive or benign.", "ground_truth": "false_positive"}
+]

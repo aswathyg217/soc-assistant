@@ -1,0 +1,4 @@
+[
+  {"id": "INC-ACME-7", "tenant": "acme", "title": "Phishing report from finance", "status": "contained", "summary": "A finance user reported phishing. A malicious forwarding rule was removed and the password reset."},
+  {"id": "INC-GLOBEX-9", "tenant": "globex", "title": "Globex production DB credential leak", "status": "active", "summary": "Globex-internal incident. Belongs to a different tenant and must never reach an acme analyst."}
+]
