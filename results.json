@@ -1,0 +1,22 @@
+{
+  "C0": {
+    "attempt_pct": 60,
+    "executed_pct": 60,
+    "benign_ok_pct": 100
+  },
+  "C1": {
+    "attempt_pct": 40,
+    "executed_pct": 40,
+    "benign_ok_pct": 100
+  },
+  "C2": {
+    "attempt_pct": 60,
+    "executed_pct": 0,
+    "benign_ok_pct": 100
+  },
+  "C1+C2": {
+    "attempt_pct": 40,
+    "executed_pct": 0,
+    "benign_ok_pct": 100
+  }
+}
