@@ -1,22 +1,62 @@
 {
   "C0": {
-    "attempt_pct": 60,
-    "executed_pct": 60,
-    "benign_ok_pct": 100
+    "fooled": [
+      67,
+      9.4
+    ],
+    "leaked": [
+      67,
+      9.4
+    ],
+    "benign": [
+      100,
+      0.0
+    ],
+    "runs": 3
   },
   "C1": {
-    "attempt_pct": 40,
-    "executed_pct": 40,
-    "benign_ok_pct": 100
+    "fooled": [
+      47,
+      24.9
+    ],
+    "leaked": [
+      47,
+      24.9
+    ],
+    "benign": [
+      100,
+      0.0
+    ],
+    "runs": 3
   },
   "C2": {
-    "attempt_pct": 60,
-    "executed_pct": 0,
-    "benign_ok_pct": 100
+    "fooled": [
+      0,
+      0.0
+    ],
+    "leaked": [
+      0,
+      0.0
+    ],
+    "benign": [
+      33,
+      47.1
+    ],
+    "runs": 3
   },
   "C1+C2": {
-    "attempt_pct": 40,
-    "executed_pct": 0,
-    "benign_ok_pct": 100
+    "fooled": [
+      0,
+      0.0
+    ],
+    "leaked": [
+      0,
+      0.0
+    ],
+    "benign": [
+      0,
+      0.0
+    ],
+    "runs": 3
   }
 }
