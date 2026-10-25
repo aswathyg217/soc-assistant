@@ -57,3 +57,10 @@ python run_eval_suppress.py  # suppression experiment
 Small hand-written corpora; single model; synthetic data. Future: a realistic
 Splunk/Hydra/Snort pipeline, a larger corpus, multi-model evaluation, and a gated
 state-changing dismissal action.
+
+## Realistic evidence source (Splunk)
+The log store is pluggable. By default logs come from `data/logs.json`; with
+`SOC_LOG_BACKEND=splunk` the assistant queries a local Splunk instance over its
+REST API instead. Setup: run Splunk in Docker, create the `soc_logs` index and a
+HEC token, ingest with `scripts/ingest_splunk.py`, set the SPLUNK_* vars in `.env`,
+then e.g. `SOC_LOG_BACKEND=splunk python run_benign.py`.
