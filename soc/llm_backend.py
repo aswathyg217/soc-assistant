@@ -1,6 +1,7 @@
-"""GroqBackend: native function-calling, retries transient API/tool errors
-(so a blip is not miscounted), falls back to 'inconclusive' only if all
-retries fail. temperature is exposed for run-to-run spread later."""
+"""GroqBackend: native function-calling with rate-limit-aware retries.
+On a 429/rate-limit it backs off exponentially (free tiers throttle hard);
+other transient errors get a short retry; only after all retries do we fall
+back to 'inconclusive'. temperature is exposed for run-to-run spread."""
 import json, os, time
 from dotenv import load_dotenv
 from groq import Groq
@@ -47,7 +48,8 @@ class GroqBackend:
             if m["role"] == "tool":
                 convo.append({"role": "user", "content": self._observation(m)})
 
-        for attempt in range(3):            # retry transient errors
+        delay, last = 5, None
+        for attempt in range(6):
             try:
                 resp = self.client.chat.completions.create(
                     model=self.model, messages=convo, tools=TOOLS,
@@ -55,7 +57,11 @@ class GroqBackend:
                 return self._parse(resp.choices[0].message)
             except Exception as e:
                 last = e
-                time.sleep(1.5)
+                msg = str(e).lower()
+                if "rate" in msg or "429" in msg or "quota" in msg:
+                    time.sleep(delay); delay = min(delay * 2, 60)   # exponential
+                else:
+                    time.sleep(2)
         return {"type": "final", "verdict": {"label": "inconclusive",
                 "recommend": "escalate",
                 "rationale": f"backend error after retries: {type(last).__name__}"}}
