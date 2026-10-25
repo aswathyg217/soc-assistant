@@ -64,3 +64,10 @@ The log store is pluggable. By default logs come from `data/logs.json`; with
 REST API instead. Setup: run Splunk in Docker, create the `soc_logs` index and a
 HEC token, ingest with `scripts/ingest_splunk.py`, set the SPLUNK_* vars in `.env`,
 then e.g. `SOC_LOG_BACKEND=splunk python run_benign.py`.
+
+## Real attack pipeline (Hydra → sshd → Splunk → assistant)
+A genuine brute-force is generated with Hydra against a live sshd; the OS logs it;
+`scripts/ingest_real_ssh.py` parses the real sshd lines into events and ships them
+to Splunk; then `SOC_LOG_BACKEND=splunk python demo_real_attack.py` has the
+assistant read the evidence live from Splunk and correctly classify it as a
+true-positive brute-force. (Snort IDS-based detection is the remaining future step.)
