@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+soc.db
+soc.db-wal
+soc.db-shm
+soc_demo.db
+soc_demo.db-wal
+soc_demo.db-shm

@@ -37,7 +37,7 @@ def install(payload):
     log = dict(BASE_LOG)
     if payload["text"]:
         log[payload["field"]] = payload["text"]
-    ds.all_logs = lambda: _orig_logs() + [log]
+    ds.all_logs = lambda *a, **k: _orig_logs() + [log]
     ds.get_alert = lambda aid: EVAL_ALERT if aid == "ALR-EVAL" else _orig_alert(aid)
 
 

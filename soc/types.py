@@ -18,10 +18,24 @@ class ToolCall:
     args: dict
 
 
+# Three policy outcomes.
+ALLOW = "allow"
+DENY = "deny"
+REQUIRE_APPROVAL = "require_approval"
+
+
 @dataclass
 class Decision:
     allowed: bool
     reason: str
+    outcome: Optional[str] = None   # allow | deny | require_approval
+    rule: Optional[str] = None      # which policy rule decided
+
+    def __post_init__(self):
+        if self.outcome is None:
+            self.outcome = ALLOW if self.allowed else DENY
+        # keep allowed consistent with a 3-valued outcome
+        self.allowed = self.outcome == ALLOW
 
 
 @dataclass

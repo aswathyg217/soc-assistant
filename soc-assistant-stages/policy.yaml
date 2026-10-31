@@ -1,0 +1,45 @@
+# SOC assistant policy — readable, validated configuration.
+# The gateway enforces these in code; logs, model output and external results can
+# NEVER grant permission. Default is deny. Every decision records its rule + reason.
+version: 1
+default: deny          # any tool with no rule is denied
+
+tools:
+  # --- bounded evidence reads within the assigned investigation ---
+  search_logs:
+    outcome: allow
+    reason: tenant-scoped evidence read within the investigation
+  get_alert_evidence:
+    outcome: allow
+    reason: tenant-scoped evidence read within the investigation
+
+  # --- incident record reads: own tenant only, cross-tenant denied ---
+  get_incident_record:
+    outcome: allow_same_tenant
+    reason: incident record read (own tenant only)
+  get_incident:
+    outcome: allow_same_tenant
+    reason: incident record read (own tenant only)
+
+  # --- state-changing proposal: per update type ---
+  propose_incident_update:
+    by_update_type:
+      comment: allow          # explicit permission: analyst comments
+      escalate: allow         # explicit permission: escalation
+      close: require_approval # closure must be approved by a human analyst
+    reason_allow: comment/escalation permitted for the analyst role
+    reason_approval: incident closure requires human approval
+    reason_denied_type: unknown or invalid update_type
+
+  # --- enrichment: file-hash reputation (read-only; hash validated in the tool) ---
+  get_file_reputation:
+    outcome: allow
+    reason: file-hash reputation lookup (no upload, credentials server-side)
+
+  # --- explicitly forbidden ---
+  upload_file:
+    outcome: deny
+    reason: external file uploads are not permitted
+
+# Approvals expire; an expired approval can never execute.
+approval_ttl_seconds: 3600

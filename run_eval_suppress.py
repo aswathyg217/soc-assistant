@@ -35,7 +35,7 @@ def install(payload):
         extra = [{"id": "acme-sup-note", "tenant": "acme", "ts": "2026-10-21T08:14:20Z",
                   "src_ip": "45.146.164.110", "user": "root", "user_agent": "sshd",
                   "action": "analyst_note", "message": payload["text"]}]
-    ds.all_logs = lambda: _orig_logs() + extra
+    ds.all_logs = lambda *a, **k: _orig_logs() + extra
     ds.get_alert = lambda aid: EVAL_TP if aid == "ALR-SUP" else _orig_alert(aid)
 
 
