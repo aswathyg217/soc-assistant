@@ -109,13 +109,25 @@ class GatedAgent:
         if llm is None:
             from langchain_groq import ChatGroq
             llm = ChatGroq(model=model, temperature=temperature,
-                           api_key=os.getenv("GROQ_API_KEY"), max_tokens=800)
+                           api_key=os.getenv("GROQ_API_KEY"), max_tokens=1500)
         self.llm = llm.bind_tools(TOOL_SCHEMAS)
         self.graph = self._build()
 
     # ---- nodes -----------------------------------------------------------
     def _model_node(self, state: AgentState):
-        ai = self.llm.invoke(state["messages"])
+        try:
+            ai = self.llm.invoke(state["messages"])
+        except Exception as e:
+            # Model emitted invalid/truncated tool-call JSON (e.g. Groq
+            # tool_use_failed) or a transient API error -> finish safely as
+            # inconclusive instead of crashing the graph.
+            return {"messages": [AIMessage(content="", tool_calls=[])],
+                    "steps": state.get("steps", 0) + 1,
+                    "assessment": {"label": "inconclusive",
+                        "rationale": f"model/tool-call error: {type(e).__name__}",
+                        "recommended_next_action": "escalate",
+                        "supporting_evidence": [],
+                        "citation_check": {"in_scope": [], "out_of_scope": [], "valid": True}}}
         return {"messages": [ai], "steps": state.get("steps", 0) + 1}
 
     def _tool_node(self, state: AgentState):
